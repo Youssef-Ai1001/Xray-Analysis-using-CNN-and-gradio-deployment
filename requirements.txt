@@ -1,0 +1,4 @@
+gradio==5.29.0
+numpy==2.2.5
+Pillow==11.2.1
+tensorflow==2.19.0
