@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadiologyAI - Advanced Medical Imaging Analysis</title>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --secondary: #ff006e;
+            --dark: #1d3557;
+            --light: #f1faee;
+            --gray: #8d99ae;
+            --success: #52b788;
+            --warning: #ffbe0b;
+            --danger: #e63946;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d90057;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(58, 134, 255, 0.1) 0%, rgba(58, 134, 255, 0.05) 100%);
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 0.8rem;
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+        
+        /* Login Form */
+        .auth-container {
+            background-color: white;
+            max-width: 450px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .auth-container h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray);
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Gradio Integration */
+        .gradio-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-container {
+            border: 2px dashed var(--gray);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-container:hover {
+            border-color: var(--primary);
+            background-color: rgba(58, 134, 255, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .patient-info {
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-container {
+            display: none; /* Initially hidden */
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .result-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-status {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .status-normal {
+            color: var(--success);
+        }
+        
+        .status-abnormal {
+            color: var(--danger);
+        }
+        
+        .result-details {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-details li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .result-details li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none; /* Initially hidden */
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+        
+        .stat-card h3 {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .recent-scans {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: #f8f9fa;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background-color: rgba(82, 183, 136, 0.15);
+            color: var(--success);
+        }
+        
+        .badge-danger {
+            background-color: rgba(230, 57, 70, 0.15);
+            color: var(--danger);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            color: var(--secondary);
+        }
+        
+        /* Mobile Styles */
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                gap: 0;
+                padding: 2rem;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                transition: left 0.3s ease;
+                z-index: 99;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin-bottom: 1.5rem;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .auth-buttons .btn {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fa-solid fa-lungs"></i>
+                    RadiologyAI
+                </div>
+                
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#" id="dashboard-link">Dashboard</a></li>
+                    <li><a href="#" id="analysis-link">Analysis</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+                
+                <div class="auth-buttons" id="authButtons">
+                    <a href="#" class="btn btn-outline" id="loginBtn">Log In</a>
+                    <a href="#" class="btn btn-primary">Sign Up</a>
+                </div>
+                
+                <div class="auth-buttons" id="userMenu" style="display: none;">
+                    <a href="#" class="btn btn-outline" id="logoutBtn">Log Out</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="heroSection">
+        <div class="container">
+            <h1>Advanced AI-Powered Radiology Analysis</h1>
+            <p>Leverage cutting-edge artificial intelligence to detect abnormalities in chest X-rays with high accuracy and speed.</p>
+            <a href="#" class="btn btn-primary" id="getStartedBtn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Features Section -->
+            <section id="features">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Why Choose RadiologyAI?</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3>AI-Powered Analysis</h3>
+                        <p>Our system uses state-of-the-art deep learning models to analyze X-ray images with high accuracy.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3>Real-time Results</h3>
+                        <p>Get instant analysis of chest X-rays, reducing wait times and improving patient care.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-shield-virus"></i>
+                        </div>
+                        <h3>Pneumonia Detection</h3>
+                        <p>Specialized in detecting pneumonia markers in chest X-rays with high sensitivity.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-file-medical"></i>
+                        </div>
+                        <h3>Automated Reports</h3>
+                        <p>Generate detailed patient reports that can be easily downloaded and shared with healthcare providers.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3>Secure & Private</h3>
+                        <p>Your medical data is encrypted and protected with industry-standard security protocols.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3>Analytics Dashboard</h3>
+                        <p>Track and monitor patient scans, results, and trends with an intuitive dashboard.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Login Form -->
+            <section id="loginSection" style="display: none;">
+                <div class="auth-container">
+                    <h2>Log In to RadiologyAI</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Log In</button>
+                    </form>
+                    
+                    <div class="form-footer">
+                        <p>Don't have an account? <a href="#">Sign Up</a></p>
+                        <p><a href="#">Forgot Password?</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gradio Integration Section -->
+            <section id="analysisSection" style="display: none;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">X-Ray Analysis</h2>
+                
+                <div class="gradio-container">
+                    <div class="patient-info">
+                        <div class="form-group">
+                            <label for="patientName">Patient Name (Optional)</label>
+                            <input type="text" id="patientName" name="patientName" placeholder="Enter patient name">
+                        </div>
+                    </div>
+                    
+                    <div class="upload-container" id="dropZone">
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                        </div>
+                        <h3>Upload X-ray Image</h3>
+                        <p>Drag & drop your X-ray image here or click to browse</p>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    </div>
+                    
+                    <div class="preview-container" id="previewContainer" style="display: none; text-align: center; margin-bottom: 1.5rem;">
+                        <h3>Preview</h3>
+                        <img id="imagePreview" src="" alt="X-ray Preview" style="max-width: 100%; max-height: 300px; border-radius: 5px;">
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%;" id="analyzeBtn">
+                        <i class="fa-solid fa-microscope"></i> Analyze X-ray
+                    </button>
+                    
+                    <div class="result-container" id="resultContainer">
+                        <div class="result-heading">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <h3>Analysis Results</h3>
+                        </div>
+                        
+                        <div class="result-status" id="resultStatus">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        
+                        <ul class="result-details">
+                            <li>
+                                <span>Patient Name:</span>
+                                <span id="resultPatientName">-</span>
+                            </li>
+                            <li>
+                                <span>Date & Time:</span>
+                                <span id="resultDateTime">-</span>
+                            </li>
+                            <li>
+                                <span>Result:</span>
+                                <span id="resultClassification">-</span>
+                            </li>
+                            <li>
+                                <span>Confidence:</span>
+                                <span id="resultConfidence">-</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="result-actions" style="display: flex; gap: 1rem;">
+                            <a href="#" class="btn btn-primary" id="downloadReportBtn">
+                                <i class="fa-solid fa-download"></i> Download Report
+                            </a>
+                            <button class="btn btn-outline" id="newAnalysisBtn">
+                                <i class="fa-solid fa-plus"></i> New Analysis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="dashboard">
+                <div class="dashboard-header">
+                    <h2 class="welcome-text">Welcome back, <span id="userName">Doctor</span></h2>
+                    <div class="date-time" id="currentDateTime">May 11, 2025</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Scans</h3>
+                        <div class="stat-value">147</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3>Scans This Week</h3>
+                        <div class="stat-value">23</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3>Abnormal Detections</h3>
+                        <div class="stat-value">42</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3>Pending Reviews</h3>
+                        <div class="stat-value">7</div>
+                    </div>
+                </div>
+                
+                <div class="recent-scans">
+                    <div class="section-header">
+                        <h2>Recent Scans</h2>
+                        <a href="#" class="btn btn-outline">View All</a>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Date</th>
+                                    <th>Classification</th>
+                                    <th>Confidence</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P-2025-0142</td>
+                                    <td>John Smith</td>
+                                    <td>May 11, 2025</td>
+                                    <td><span class="badge badge-success">Normal</span></td>
+                                    <td>98.4%</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fa-solid fa-download"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>P-2025-0141</td>
+                                    <td>Emily Johnson</td>
+                                    <td>May 10, 2025</td>
+                                    <td><span class="badge badge-danger">Abnormal</span></td>
+                                    <td>89.2%</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fa-solid fa-download"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>P-2025-0140</td>
+                                    <td>Michael Brown</td>
+                                    <td>May 10, 2025</td>
+                                    <td><span class="badge badge-success">Normal</span></td>
+                                    <td>97.8%</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fa-solid fa-download"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>P-2025-0139</td>
+                                    <td>Sarah Davis</td>
+                                    <td>May 9, 2025</td>
+                                    <td><span class="badge badge-danger">Abnormal</span></td>
+                                    <td>92.7%</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fa-solid fa-download"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>P-2025-0138</td>
+                                    <td>Robert Wilson</td>
+                                    <td>May 9, 2025</td>
+                                    <td><span class="badge badge-success">Normal</span></td>
+                                    <td>99.1%</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fa-solid fa-download"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About RadiologyAI</h3>
+                    <p style="margin-bottom: 1rem; line-height: 1.6;">We're dedicated to improving healthcare outcomes through advanced AI technology that assists radiologists in detecting abnormalities in medical imaging.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Analysis</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fa-solid fa-envelope"></i>
+                            info@radiologyai.com
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            +1 (555) 123-4567
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            123 Medical Center Dr, Healthcare City
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 RadiologyAI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // DOM Elements
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginSection = document.getElementById('loginSection');
+        const heroSection = document.getElementById('heroSection');
+        const featuresSection = document.getElementById('features');
+        const loginForm = document.getElementById('loginForm');
+        const authButtons = document.getElementById('authButtons');
+        const userMenu = document.getElementById('userMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const dashboardLink = document.getElementById('dashboard-link');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const analysisLink = document.getElementById('analysis-link');
+        const analysisSection = document.getElementById('analysisSection');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        
+        // Mobile Menu Toggle
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Login Button Click
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            heroSection.style.display = 'none';
+            featuresSection.style.display = 'none';
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+            analysisSection.style.display = 'none';
+        });
+        
+        // Get Started Button Click
+        getStartedBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            heroSection.style.display = 'none';
+            featuresSection.style.display = 'none';
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+            analysisSection.style.display = 'none';
+        });
+        
+        // Dashboard Link Click
+        dashboardLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Only show dashboard if user is logged in
+            if (isLoggedIn()) {
+                heroSection.style.display = 'none';
+                featuresSection.style.display = 'none';
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                analysisSection.style.display = 'none';
+                
+                // Update current date time
+                updateDateTime();
+            } else {
+                loginBtn.click();
+            }
+        });
+        
+        // Analysis Link Click
+        analysisLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Only show analysis if user is logged in
+            if (isLoggedIn()) {
+                heroSection.style.display = 'none';
+                featuresSection.style.display = 'none';
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'none';
+                analysisSection.style.display = 'block';
+            } else {
+                loginBtn.click();
+            }
+        });
+        
+        // Login Form Submit
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation
+            if (email && password) {
+                // Store user info in localStorage (for demo purposes)
+                const user = {
+                    email: email,
+                    name: email.split('@')[0],
+                    isLoggedIn: true
+                };
+                
+                localStorage.setItem('userInfo', JSON.stringify(user));
+                
+                // Update UI for logged in user
+                updateUIForLoggedInUser(user);
+                
+                // Show dashboard after login
+                dashboardLink.click();
+            }
+        });
+        
+        // Logout Button Click
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Clear user info from localStorage
+            localStorage.removeItem('userInfo');
+            
+            // Update UI for logged out user
+            updateUIForLoggedOutUser();
+            
+            // Show home page
+            window.location.reload();
+        });
+        
+        // Check if user is logged in
+        function isLoggedIn() {
+            const userInfo = localStorage.getItem('userInfo');
+            return userInfo && JSON.parse(userInfo).isLoggedIn;
+        }
+        
+        // Update UI for logged in user
+        function updateUIForLoggedInUser(user) {
+            authButtons.style.display = 'none';
+            userMenu.style.display = 'block';
+            document.getElementById('userName').textContent = user.name;
+        }
+        
+        // Update UI for logged out user
+        function updateUIForLoggedOutUser() {
+            authButtons.style.display = 'flex';
+            userMenu.style.display = 'none';
+        }
+        
+        // Update current date time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        // Check user status on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (isLoggedIn()) {
+                const user = JSON.parse(localStorage.getItem('userInfo'));
+                updateUIForLoggedInUser(user);
+            } else {
+                updateUIForLoggedOutUser();
+            }
+        });
+
+        // X-Ray Analysis Section - Gradio Integration
+        const dropZone = document.getElementById('dropZone');
+        const imageUpload = document.getElementById('imageUpload');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultStatus = document.getElementById('resultStatus');
+        const resultPatientName = document.getElementById('resultPatientName');
+        const resultDateTime = document.getElementById('resultDateTime');
+        const resultClassification = document.getElementById('resultClassification');
+        const resultConfidence = document.getElementById('resultConfidence');
+        const downloadReportBtn = document.getElementById('downloadReportBtn');
+        const newAnalysisBtn = document.getElementById('newAnalysisBtn');
+        
+        // Handle file selection via clicking
+        dropZone.addEventListener('click', () => {
+            imageUpload.click();
+        });
+        
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#3a86ff';
+            dropZone.style.backgroundColor = 'rgba(58, 134, 255, 0.1)';
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#8d99ae';
+            dropZone.style.backgroundColor = 'transparent';
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#8d99ae';
+            dropZone.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleFileUpload(e.dataTransfer.files[0]);
+            }
+        });
+        
+        // Handle file input change
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+        
+        // Process uploaded file
+        function handleFileUpload(file) {
+            // Check if file is an image
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload an image file.');
+                return;
+            }
+            
+            // Create file preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Handle analyze button click
+        analyzeBtn.addEventListener('click', () => {
+            const patientName = document.getElementById('patientName').value || 'Anonymous';
+            
+            // Check if image was uploaded
+            if (!imagePreview.src) {
+                alert('Please upload an X-ray image first.');
+                return;
+            }
+            
+            // Show loading state
+            analyzeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...';
+            analyzeBtn.disabled = true;
+            
+            // Simulate API call to Gradio backend
+            simulateGradioAPICall(imagePreview.src, patientName)
+                .then(response => {
+                    // Update results UI
+                    updateResults(response);
+                    
+                    // Reset button state
+                    analyzeBtn.innerHTML = '<i class="fa-solid fa-microscope"></i> Analyze X-ray';
+                    analyzeBtn.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred during analysis. Please try again.');
+                    
+                    // Reset button state
+                    analyzeBtn.innerHTML = '<i class="fa-solid fa-microscope"></i> Analyze X-ray';
+                    analyzeBtn.disabled = false;
+                });
+        });
+        
+        // Simulate Gradio API call
+        async function simulateGradioAPICall(imageData, patientName) {
+            // In a real implementation, this would call your Python backend
+            // For demo purposes, we'll return mock data after a delay
+            
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Generate random result (70% normal, 30% abnormal for demo)
+                    const isNormal = Math.random() > 0.3;
+                    const confidence = isNormal 
+                        ? (90 + Math.random() * 9).toFixed(2) 
+                        : (75 + Math.random() * 20).toFixed(2);
+                    
+                    resolve({
+                        Class: isNormal ? "Normal" : "Abnormal",
+                        Confidence: `${confidence}%`,
+                        PatientName: patientName,
+                        DateTime: new Date().toLocaleString(),
+                        Message: "📝 Patient report generated successfully!"
+                    });
+                }, 2000); // 2 second delay to simulate processing
+            });
+        }
+        
+        // Update results UI
+        function updateResults(response) {
+            // Display result container
+            resultContainer.style.display = 'block';
+            
+            // Update result values
+            resultPatientName.textContent = response.PatientName;
+            resultDateTime.textContent = response.DateTime;
+            resultClassification.textContent = response.Class;
+            resultConfidence.textContent = response.Confidence;
+            
+            // Style based on classification
+            if (response.Class === "Normal") {
+                resultStatus.innerHTML = '<i class="fa-solid fa-check-circle"></i> Normal Scan Detected';
+                resultStatus.className = 'result-status status-normal';
+            } else {
+                resultStatus.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Abnormality Detected';
+                resultStatus.className = 'result-status status-abnormal';
+            }
+            
+            // Scroll to results
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Handle new analysis button
+        newAnalysisBtn.addEventListener('click', () => {
+            // Reset the form
+            document.getElementById('patientName').value = '';
+            imagePreview.src = '';
+            previewContainer.style.display = 'none';
+            resultContainer.style.display = 'none';
+            
+            // Scroll back to top of analysis section
+            analysisSection.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Handle download report button
+        downloadReportBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Get report data
+            const patientName = resultPatientName.textContent;
+            const dateTime = resultDateTime.textContent;
+            const classification = resultClassification.textContent;
+            const confidence = resultConfidence.textContent;
+            
+            // Create report content
+            const reportContent = [
+                "🩺 Patient Report",
+                "--------------------------",
+                `🧑 Patient Name : ${patientName}`,
+                `🗓️ Date         : ${dateTime}`,
+                `🧪 Result       : ${classification}`,
+                `📊 Confidence   : ${confidence}`,
+                "--------------------------",
+                "📌 Note: This prediction is generated by a deep learning model. Please consult a medical professional for final diagnosis."
+            ].join('\n');
+            
+            // Create and download report file
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const filename = `Report_${patientName}_${new Date().toISOString().replace(/[:.]/g, '-')}.txt`;
+            
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // This is where we would integrate with the actual Python Gradio backend
+        // In a real implementation, we would:
+        // 1. Set up a communication channel with the Gradio server
+        // 2. Send image data to the predict_xray function
+        // 3. Receive and process the response
+        
+        // Example implementation using fetch to communicate with Gradio backend:
+        /*
+        async function callGradioBackend(imageData, patientName) {
+            // Convert image data to blob/file format that Gradio expects
+            const imgBlob = await fetch(imageData).then(r => r.blob());
+            const formData = new FormData();
+            formData.append('image', imgBlob);
+            formData.append('patient_name', patientName);
+            
+            // Call the Gradio API endpoint (adjust URL as needed)
+            const response = await fetch('http://127.1.1.1:6060/api/predict', {
+                method: 'POST',
+                body: formData
+            });
+            
+            return response.json();
+        }
+        */
+    </script>
