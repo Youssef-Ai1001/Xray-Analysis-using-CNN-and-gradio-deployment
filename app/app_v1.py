@@ -7,7 +7,7 @@ from PIL import Image
 import io
 
 # Configuration
-MODEL_PATH = "model/pneumonia_detection_Vision_Model.keras"  # or "xray_model.h5" depending on which you have
+MODEL_PATH = "models/pneumonia_detection_Vision_Model.keras"  # or "xray_model.h5" depending on which you have
 CLASSES = ["Normal", "Abnormal"]  # Update with your actual class names
 
 def load_model():

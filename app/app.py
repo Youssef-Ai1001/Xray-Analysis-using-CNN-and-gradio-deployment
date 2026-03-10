@@ -7,7 +7,7 @@ from PIL import Image
 import datetime
 
 # Configuration
-MODEL_PATH = "model/pneumonia_detection_Vision_Model.keras"
+MODEL_PATH = "models/pneumonia_detection_Vision_Model.keras"
 CLASSES = ["Normal", "Abnormal"]
 REPORT_DIR = "reports"
 
